@@ -47,10 +47,13 @@ fun NotesApp(noteViewModel: NoteViewModel) {
      * state holder 를 담당하는 Composable 을 한 단계 거치도록 함
      */
     val noteList = noteViewModel.noteList.collectAsState()
+
     NoteScreen(
         notes = noteList.value,
         onAddNote = noteViewModel::addNote,
-        onRemoteNote = noteViewModel::removeNote
+        onRemoveNote = noteViewModel::removeNote,
+        currentNote = noteViewModel.currentNote.collectAsState().value,
+        onSetCurrentNote = noteViewModel::setCurrentNote
     )
 }
 

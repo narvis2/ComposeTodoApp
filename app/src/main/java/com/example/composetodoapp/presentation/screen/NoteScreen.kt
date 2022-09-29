@@ -31,7 +31,13 @@ import com.example.composetodoapp.presentation.components.NoteRow
 
 @ExperimentalComposeUiApi
 @Composable
-fun NoteScreen(notes: List<Note>, onAddNote: (Note) -> Unit, onRemoteNote: (Note) -> Unit) {
+fun NoteScreen(
+    notes: List<Note>,
+    onAddNote: (Note) -> Unit,
+    onRemoveNote: (Note) -> Unit,
+    currentNote: Note?,
+    onSetCurrentNote: (Note) -> Unit
+) {
     val title = remember {
         mutableStateOf("")
     }
@@ -109,7 +115,9 @@ fun NoteScreen(notes: List<Note>, onAddNote: (Note) -> Unit, onRemoteNote: (Note
         Divider(modifier = Modifier.padding(10.dp))
         LazyColumn {
             items(notes) { note ->
-                NoteRow(note = note, onNoteClicked = { showDialog.value = true })
+                NoteRow(note = note, onNoteClicked = {
+                    showDialog.value = true
+                })
             }
         }
     }

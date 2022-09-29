@@ -23,6 +23,9 @@ class NoteViewModel @Inject constructor(
     private val _noteList = MutableStateFlow<List<Note>>(emptyList())
     val noteList = _noteList.asStateFlow()
 
+    private val _currentNote = MutableStateFlow<Note?>(null)
+    val currentNote = _currentNote.asStateFlow()
+
     init {
         requestGetAllNoteList()
     }
@@ -48,5 +51,9 @@ class NoteViewModel @Inject constructor(
 
     fun removeAllNote() = viewModelScope.launch(Dispatchers.IO) {
         requestDeleteAllNoteListUseCase()
+    }
+
+    fun setCurrentNote(note: Note) {
+        _currentNote.value = note
     }
 }
