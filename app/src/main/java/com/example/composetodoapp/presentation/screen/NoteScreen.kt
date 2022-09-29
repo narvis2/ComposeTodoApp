@@ -1,4 +1,4 @@
-package com.example.composetodoapp.screen
+package com.example.composetodoapp.presentation.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,10 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composetodoapp.R
-import com.example.composetodoapp.components.NoteButton
-import com.example.composetodoapp.components.NoteInputText
-import com.example.composetodoapp.components.NoteRow
-import com.example.composetodoapp.model.Note
+import com.example.composetodoapp.presentation.components.NoteButton
+import com.example.composetodoapp.presentation.components.NoteInputText
+import com.example.composetodoapp.presentation.components.NoteRow
+import com.example.composetodoapp.domain.model.Note
 
 @ExperimentalComposeUiApi
 @Composable
@@ -58,6 +58,10 @@ fun NoteScreen(notes: List<Note>, onAddNote: (Note) -> Unit, onRemoteNote: (Note
                 label = "제목",
                 onTextChange = {
                     if (it.all { char ->
+                            /**
+                             * char.isLetter() -> 이 문자가 문자인 경우에 true
+                             * char.isWhitespace() -> 유니 코드 표준에 따라 문자가 공백인지 여부 공백이면 true
+                             */
                             /**
                              * char.isLetter() -> 이 문자가 문자인 경우에 true
                              * char.isWhitespace() -> 유니 코드 표준에 따라 문자가 공백인지 여부 공백이면 true
