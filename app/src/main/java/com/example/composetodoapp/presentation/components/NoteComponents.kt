@@ -1,4 +1,4 @@
-package com.example.composetodoapp.components
+package com.example.composetodoapp.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -18,8 +18,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.example.composetodoapp.model.Note
-import java.time.format.DateTimeFormatter
+import com.example.composetodoapp.domain.model.Note
+import com.example.composetodoapp.presentation.utils.timeFormatter
 
 @ExperimentalComposeUiApi
 @Composable
@@ -90,7 +90,7 @@ fun NoteRow(
             Text(text = note.title, style = MaterialTheme.typography.subtitle2)
             Text(text = note.description, style = MaterialTheme.typography.subtitle1)
             Text(
-                text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE, d MMM")),
+                text = timeFormatter().print(note.entryDate),
                 style = MaterialTheme.typography.caption
             )
         }
