@@ -23,10 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composetodoapp.R
+import com.example.composetodoapp.domain.model.Note
+import com.example.composetodoapp.presentation.components.CustomDialog
 import com.example.composetodoapp.presentation.components.NoteButton
 import com.example.composetodoapp.presentation.components.NoteInputText
 import com.example.composetodoapp.presentation.components.NoteRow
-import com.example.composetodoapp.domain.model.Note
 
 @ExperimentalComposeUiApi
 @Composable
@@ -36,6 +37,17 @@ fun NoteScreen(notes: List<Note>, onAddNote: (Note) -> Unit, onRemoteNote: (Note
     }
     val description = remember {
         mutableStateOf("")
+    }
+    val showDialog = remember {
+        mutableStateOf(false)
+    }
+
+    if (showDialog.value) {
+        CustomDialog(value = "test", setShowDialog = {
+            showDialog.value = it
+        }, setValue = {
+
+        })
     }
 
     // 현재 소프트웨어 키보드를 제어할 수 있는 SoftwareKeyboardController 를 반환
@@ -97,7 +109,7 @@ fun NoteScreen(notes: List<Note>, onAddNote: (Note) -> Unit, onRemoteNote: (Note
         Divider(modifier = Modifier.padding(10.dp))
         LazyColumn {
             items(notes) { note ->
-                NoteRow(note = note, onNoteClicked = {})
+                NoteRow(note = note, onNoteClicked = { showDialog.value = true })
             }
         }
     }
