@@ -17,10 +17,18 @@ import androidx.navigation.NavController
 import com.example.composetodoapp.R
 import com.example.composetodoapp.domain.model.Note
 import com.example.composetodoapp.presentation.components.NoteDetailContentView
+import com.example.composetodoapp.presentation.navigation.NavigationType
 import com.example.composetodoapp.presentation.utils.timeFormatter
 
 @Composable
-fun NoteDetailScreen(navController: NavController, note: Note?, onDeleteNote: (Note) -> Unit) {
+fun NoteDetailScreen(
+    navController: NavController,
+    note: Note?,
+    setCustomDialogTitle: (Pair<String, Int?>) -> Unit,
+    setCustomDialogConfirmText: (Int) -> Unit,
+    setCustomDialogCancelText: (Int) -> Unit,
+    setCurrentNote: (Note) -> Unit,
+) {
     note?.let { data ->
         val title = data.title
         val description = data.description
@@ -38,8 +46,11 @@ fun NoteDetailScreen(navController: NavController, note: Note?, onDeleteNote: (N
                 }
             }, actions = {
                 IconButton(onClick = {
-                    onDeleteNote(data)
-                    navController.popBackStack()
+                    setCurrentNote(data)
+                    setCustomDialogTitle(data.title to R.string.dialog_title)
+                    setCustomDialogConfirmText(R.string.str_delete)
+                    setCustomDialogCancelText(R.string.str_cancel)
+                    navController.navigate(route = NavigationType.CUSTOMDIALOG.name)
                 }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
