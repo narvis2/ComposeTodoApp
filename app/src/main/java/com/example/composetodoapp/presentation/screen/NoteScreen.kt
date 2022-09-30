@@ -1,8 +1,6 @@
 package com.example.composetodoapp.presentation.screen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -21,10 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composetodoapp.R
 import com.example.composetodoapp.domain.model.Note
-import com.example.composetodoapp.presentation.components.CustomDialog
-import com.example.composetodoapp.presentation.components.NoteButton
-import com.example.composetodoapp.presentation.components.NoteInputText
-import com.example.composetodoapp.presentation.components.NoteRow
+import com.example.composetodoapp.presentation.components.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -34,6 +29,7 @@ fun NoteScreen(
     notes: List<Note>,
     onAddNote: (Note) -> Unit,
     onRemoveNote: (Note) -> Unit,
+    onRemoveAll: () -> Unit,
     coroutineScope: CoroutineScope
 ) {
     val title = remember {
@@ -44,6 +40,10 @@ fun NoteScreen(
     }
     val showDialog = remember {
         mutableStateOf<Pair<Boolean, Note?>>(false to null)
+    }
+
+    val showAllRemoveDialog = remember {
+        mutableStateOf(false)
     }
 
     val scaffoldState = rememberScaffoldState()
@@ -61,6 +61,20 @@ fun NoteScreen(
                         scaffoldState.snackbarHostState.showSnackbar("${note.title}를 삭제하였습니다.")
                     }
                 })
+        }
+    }
+
+    if (showAllRemoveDialog.value) {
+        CustomDialog(
+            value = stringResource(id = R.string.dialog_all_remove_title),
+            setShowDialog = {
+                showAllRemoveDialog.value = it
+            }) {
+            onRemoveAll()
+            showAllRemoveDialog.value = false
+            coroutineScope.launch {
+                scaffoldState.snackbarHostState.showSnackbar("전체 메모를 삭제하였습니다.")
+            }
         }
     }
 
@@ -112,7 +126,7 @@ fun NoteScreen(
                 keyboardContainer = keyboardContainer
             )
 
-            NoteButton(text = "저장") {
+            NoteButton(text = "저장", enabled = title.value.isNotEmpty() && description.value.isNotEmpty()) {
                 if (title.value.isNotEmpty() && description.value.isNotEmpty()) {
                     onAddNote(Note(title = title.value, description = description.value))
                     coroutineScope.launch {
@@ -125,7 +139,22 @@ fun NoteScreen(
             }
 
             // 구분선
-            Divider(modifier = Modifier.padding(10.dp))
+            Divider(modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = stringResource(id = R.string.note_cnt, notes.size), modifier = Modifier.padding(end = 10.dp))
+                DeleteView(text = "전체 삭제", enabled = notes.isNotEmpty()) {
+                    showAllRemoveDialog.value = true
+                }
+            }
+
             LazyColumn {
                 items(notes) { note ->
                     NoteRow(note = note, onNoteClicked = {

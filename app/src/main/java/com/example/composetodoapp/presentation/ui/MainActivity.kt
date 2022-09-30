@@ -54,6 +54,7 @@ fun NotesApp(noteViewModel: NoteViewModel, coroutineScope: CoroutineScope) {
         notes = noteList.value,
         onAddNote = noteViewModel::addNote,
         onRemoveNote = noteViewModel::removeNote,
+        onRemoveAll = noteViewModel::removeAllNote,
         coroutineScope
     )
 }

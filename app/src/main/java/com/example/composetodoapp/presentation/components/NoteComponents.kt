@@ -2,9 +2,7 @@ package com.example.composetodoapp.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -49,15 +47,12 @@ fun NoteInputText(
 
 @Composable
 fun NoteButton(
-    modifier: Modifier = Modifier,
-    text: String,
-    enabled: Boolean = true,
-    onClick: () -> Unit
+    modifier: Modifier = Modifier, text: String, enabled: Boolean = true, onClick: () -> Unit
 ) {
     OutlinedButton(
         onClick = onClick,
         shape = RoundedCornerShape(50),
-        border = BorderStroke(1.dp, Color.Red),
+        border = BorderStroke(1.dp, if (enabled) Color.Red else Color.Gray),
         enabled = enabled,
         modifier = modifier,
         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
@@ -67,10 +62,33 @@ fun NoteButton(
 }
 
 @Composable
-fun NoteRow(
+fun DeleteView(
     modifier: Modifier = Modifier,
-    note: Note,
-    onNoteClicked: (Note) -> Unit
+    text: String,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+
+        OutlinedButton(
+            onClick = onClick,
+            shape = RoundedCornerShape(
+                topStart = 5.dp,
+                topEnd = 5.dp,
+                bottomStart = 5.dp,
+                bottomEnd = 5.dp
+            ),
+            border = BorderStroke(1.dp, if (enabled) Color.Blue else Color.Gray),
+            enabled = enabled,
+            modifier = modifier,
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
+        ) {
+            Text(text = text)
+        }
+}
+
+@Composable
+fun NoteRow(
+    modifier: Modifier = Modifier, note: Note, onNoteClicked: (Note) -> Unit
 ) {
     Surface(
         modifier
