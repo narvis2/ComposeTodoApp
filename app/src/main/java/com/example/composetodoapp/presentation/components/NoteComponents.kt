@@ -14,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.example.composetodoapp.R
 import com.example.composetodoapp.domain.model.Note
 import com.example.composetodoapp.presentation.utils.timeFormatter
 
@@ -93,10 +95,19 @@ fun NoteRow(
     Surface(
         modifier
             .padding(4.dp)
-            .clip(RoundedCornerShape(topEnd = 33.dp, bottomStart = 33.dp))
+            .clip(
+                RoundedCornerShape(
+                    topEnd = 33.dp,
+                    bottomStart = 33.dp,
+                    topStart = 5.dp,
+                    bottomEnd = 5.dp
+                )
+            )
             .fillMaxWidth(),
-        color = Color(0xFFDFE6EB),
-        elevation = 6.dp
+        color = Color.White,
+        elevation = 6.dp,
+        border = BorderStroke(1.dp, colorResource(id = R.color.orange)),
+        shape = RoundedCornerShape(topEnd = 33.dp, bottomStart = 33.dp, topStart = 5.dp, bottomEnd = 5.dp),
     ) {
         // clickable 뒤에 Padding 을 넣어야 Click 영역 커짐
         Column(
