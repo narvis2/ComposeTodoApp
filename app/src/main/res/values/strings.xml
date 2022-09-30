@@ -6,4 +6,7 @@
     <string name="note_detail_title">%1$s 노트 상세</string>
     <string name="note_create_at">작성 : %1$s</string>
     <string name="note_update_at">수정 : %1$s</string>
+    <string name="delete_note">$1$s를 삭제 하였습니다.</string>
+    <string name="str_cancel">취소</string>
+    <string name="str_delete">삭제</string>
 </resources>

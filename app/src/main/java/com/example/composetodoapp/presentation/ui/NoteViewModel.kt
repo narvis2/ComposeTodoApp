@@ -1,5 +1,6 @@
 package com.example.composetodoapp.presentation.ui
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composetodoapp.domain.model.Note
@@ -22,6 +23,27 @@ class NoteViewModel @Inject constructor(
     private val requestSaveNoteUseCase: RequestSaveNoteUseCase,
     private val requestUpdateNoteUseCase: RequestUpdateNoteUseCase
 ) : ViewModel() {
+
+    private val _customDialogTitle = MutableStateFlow<Pair<String, Int?>>("" to null)
+    val customDialogTitle = _customDialogTitle.asStateFlow()
+
+    fun setCustomDialogTitle(dialogTitle: Pair<String, Int?>) {
+        _customDialogTitle.value = dialogTitle
+    }
+
+    private val _customDialogConfirmText = MutableStateFlow(0)
+    val customDialogConfirmText = _customDialogConfirmText.asStateFlow()
+
+    fun setCustomDialogConfirmText(@StringRes confirmText: Int) {
+        _customDialogConfirmText.value = confirmText
+    }
+
+    private val _customDialogCancelText = MutableStateFlow(0)
+    val customDialogCancelText = _customDialogCancelText.asStateFlow()
+
+    fun setCustomDialogCancelText(@StringRes cancelText: Int) {
+        _customDialogCancelText.value = cancelText
+    }
 
     private val _currentNote = MutableStateFlow<Note?>(null)
     val currentNote = _currentNote.asStateFlow()

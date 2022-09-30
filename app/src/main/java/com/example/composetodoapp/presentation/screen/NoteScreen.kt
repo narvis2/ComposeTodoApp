@@ -31,54 +31,18 @@ fun NoteScreen(
     navController: NavController,
     notes: List<Note>,
     onAddNote: (Note) -> Unit,
-    onRemoveNote: (Note) -> Unit,
-    onRemoveAll: () -> Unit,
     coroutineScope: CoroutineScope,
-    setCurrentNote: (Note) -> Unit
+    setCurrentNote: (Note) -> Unit,
+    scaffoldState: ScaffoldState,
+    setCustomDialogTitle: (Pair<String, Int?>) -> Unit,
+    setCustomDialogConfirmText: (Int) -> Unit,
+    setCustomDialogCancelText: (Int) -> Unit
 ) {
     val title = remember {
         mutableStateOf("")
     }
     val description = remember {
         mutableStateOf("")
-    }
-    val showDialog = remember {
-        mutableStateOf<Pair<Boolean, Note?>>(false to null)
-    }
-
-    val showAllRemoveDialog = remember {
-        mutableStateOf(false)
-    }
-
-    val scaffoldState = rememberScaffoldState()
-
-    if (showDialog.value.first) {
-        showDialog.value.second?.let { note ->
-            CustomDialog(value = stringResource(id = R.string.dialog_title, note.title),
-                setShowDialog = {
-                    showDialog.value = it to null
-                },
-                onConfirmClick = {
-                    onRemoveNote(note)
-                    showDialog.value = false to null
-                    coroutineScope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar("${note.title}를 삭제하였습니다.")
-                    }
-                })
-        }
-    }
-
-    if (showAllRemoveDialog.value) {
-        CustomDialog(value = stringResource(id = R.string.dialog_all_remove_title),
-            setShowDialog = {
-                showAllRemoveDialog.value = it
-            }) {
-            onRemoveAll()
-            showAllRemoveDialog.value = false
-            coroutineScope.launch {
-                scaffoldState.snackbarHostState.showSnackbar("전체 메모를 삭제하였습니다.")
-            }
-        }
     }
 
     // 현재 소프트웨어 키보드를 제어할 수 있는 SoftwareKeyboardController 를 반환
@@ -160,7 +124,10 @@ fun NoteScreen(
                     modifier = Modifier.padding(end = 10.dp)
                 )
                 DeleteView(text = "전체 삭제", enabled = notes.isNotEmpty()) {
-                    showAllRemoveDialog.value = true
+                    setCustomDialogTitle("" to R.string.dialog_all_remove_title)
+                    setCustomDialogConfirmText(R.string.str_delete)
+                    setCustomDialogCancelText(R.string.str_cancel)
+                    navController.navigate(route = NavigationType.CUSTOMDIALOG.name)
                 }
             }
 
@@ -173,7 +140,11 @@ fun NoteScreen(
                             navController.navigate(route = NavigationType.DETAILSCREEN.name)
                         },
                         onRemoveNoteClick = {
-                            showDialog.value = true to it
+                            setCurrentNote(it)
+                            setCustomDialogTitle(it.title to R.string.dialog_title)
+                            setCustomDialogConfirmText(R.string.str_delete)
+                            setCustomDialogCancelText(R.string.str_cancel)
+                            navController.navigate(route = NavigationType.CUSTOMDIALOG.name)
                         }
                     )
                 }
