@@ -12,9 +12,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import com.example.composetodoapp.presentation.screen.NoteScreen
 import com.example.composetodoapp.presentation.theme.ComposeTodoAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 
 @ExperimentalComposeUiApi
 @AndroidEntryPoint
@@ -29,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
-                    NotesApp(noteViewModel = noteViewModel)
+                    NotesApp(noteViewModel = noteViewModel, lifecycleScope)
                 }
             }
         }
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalComposeUiApi
 @Composable
-fun NotesApp(noteViewModel: NoteViewModel) {
+fun NotesApp(noteViewModel: NoteViewModel, coroutineScope: CoroutineScope) {
     /**
      * state holder -> NotesApp()
      * 실제 UI를 그리는 Composable -> NoteScreen()
@@ -52,6 +54,7 @@ fun NotesApp(noteViewModel: NoteViewModel) {
         notes = noteList.value,
         onAddNote = noteViewModel::addNote,
         onRemoveNote = noteViewModel::removeNote,
+        coroutineScope
     )
 }
 
