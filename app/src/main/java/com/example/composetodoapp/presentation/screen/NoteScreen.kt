@@ -35,8 +35,6 @@ fun NoteScreen(
     notes: List<Note>,
     onAddNote: (Note) -> Unit,
     onRemoveNote: (Note) -> Unit,
-    currentNote: Note?,
-    onSetCurrentNote: (Note) -> Unit
 ) {
     val title = remember {
         mutableStateOf("")
@@ -45,15 +43,22 @@ fun NoteScreen(
         mutableStateOf("")
     }
     val showDialog = remember {
-        mutableStateOf(false)
+        mutableStateOf<Pair<Boolean, Note?>>(false to null)
     }
 
-    if (showDialog.value) {
-        CustomDialog(value = "test", setShowDialog = {
-            showDialog.value = it
-        }, setValue = {
-
-        })
+    if (showDialog.value.first) {
+        showDialog.value.second?.let { note ->
+            CustomDialog(
+                value = stringResource(id = R.string.dialog_title, note.title),
+                setShowDialog = {
+                    showDialog.value = it to null
+                },
+                onConfirmClick = {
+                    onRemoveNote(note)
+                    showDialog.value = false to null
+                }
+            )
+        }
     }
 
     // 현재 소프트웨어 키보드를 제어할 수 있는 SoftwareKeyboardController 를 반환
@@ -116,7 +121,7 @@ fun NoteScreen(
         LazyColumn {
             items(notes) { note ->
                 NoteRow(note = note, onNoteClicked = {
-                    showDialog.value = true
+                    showDialog.value = true to it
                 })
             }
         }

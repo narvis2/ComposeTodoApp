@@ -46,14 +46,12 @@ fun NotesApp(noteViewModel: NoteViewModel) {
      * UI를 직접 그리는 NoteScreen Composable 에는 ViewModel 을 직접 주입하지 않고,
      * state holder 를 담당하는 Composable 을 한 단계 거치도록 함
      */
-    val noteList = noteViewModel.noteList.collectAsState()
+    val noteList = noteViewModel.requestGetAllNoteList.collectAsState()
 
     NoteScreen(
         notes = noteList.value,
         onAddNote = noteViewModel::addNote,
         onRemoveNote = noteViewModel::removeNote,
-        currentNote = noteViewModel.currentNote.collectAsState().value,
-        onSetCurrentNote = noteViewModel::setCurrentNote
     )
 }
 
