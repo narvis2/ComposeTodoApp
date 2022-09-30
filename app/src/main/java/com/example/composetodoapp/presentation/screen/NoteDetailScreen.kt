@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,33 +20,40 @@ import com.example.composetodoapp.presentation.components.NoteDetailContentView
 import com.example.composetodoapp.presentation.utils.timeFormatter
 
 @Composable
-fun NoteDetailScreen(navController: NavController, note: Note?) {
-    val title = note?.title ?: ""
-    val description = note?.description ?: ""
-    val insertDate = timeFormatter().print(note?.entryDate)
-    Scaffold(topBar = {
-        TopAppBar(backgroundColor = Color.White, title = {
-            Text(
-                text = stringResource(
-                    id = R.string.note_detail_title, title
-                ), style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp)
+fun NoteDetailScreen(navController: NavController, note: Note?, onDeleteNote: (Note) -> Unit) {
+    note?.let { data ->
+        val title = data.title
+        val description = data.description
+        val insertDate = timeFormatter("YY-MM-dd HH:mm").print(data.entryDate)
+        Scaffold(topBar = {
+            TopAppBar(backgroundColor = Color.White, title = {
+                Text(
+                    text = stringResource(
+                        id = R.string.note_detail_title, title
+                    ), style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                )
+            }, navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                }
+            }, actions = {
+                IconButton(onClick = {
+                    onDeleteNote(data)
+                    navController.popBackStack()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Search",
+                        modifier = Modifier.padding(end = 10.dp)
+                    )
+                }
+            })
+        }) {
+            NoteDetailContentView(
+                title = title,
+                description = description,
+                insertDate = insertDate
             )
-        }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-            }
-        }, actions = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "Search",
-                modifier = Modifier.padding(end = 10.dp)
-            )
-        })
-    }) {
-        NoteDetailContentView(
-            title = title,
-            description = description,
-            insertDate = insertDate
-        )
+        }
     }
 }

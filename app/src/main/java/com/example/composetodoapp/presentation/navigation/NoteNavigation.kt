@@ -34,7 +34,7 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
         composable(
             route = NavigationType.DETAILSCREEN.name,
         ) {
-            NoteDetailScreen(navController = navController, note.value)
+            NoteDetailScreen(navController = navController, note.value, viewModel::removeNote)
         }
     }
 }

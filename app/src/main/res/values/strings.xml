@@ -4,4 +4,6 @@
     <string name="dialog_all_remove_title">전체 메모를 \n 삭제 하시겠습니까?</string>
     <string name="note_cnt">목록 : "<b>"%1$d"</b>" 개</string>
     <string name="note_detail_title">%1$s 노트 상세</string>
+    <string name="note_create_at">작성 : %1$s</string>
+    <string name="note_update_at">수정 : %1$s</string>
 </resources>
