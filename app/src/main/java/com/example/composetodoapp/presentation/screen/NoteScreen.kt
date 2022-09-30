@@ -17,15 +17,18 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.composetodoapp.R
 import com.example.composetodoapp.domain.model.Note
 import com.example.composetodoapp.presentation.components.*
+import com.example.composetodoapp.presentation.navigation.NavigationType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @Composable
 fun NoteScreen(
+    navController: NavController,
     notes: List<Note>,
     onAddNote: (Note) -> Unit,
     onRemoveNote: (Note) -> Unit,
@@ -165,7 +168,7 @@ fun NoteScreen(
                     NoteRow(
                         note = note,
                         onNoteClicked = {
-                            // TODO: 상세화면으로 이동 -> BottomSheet 띄울 것
+                            navController.navigate(route = NavigationType.DETAILSCREEN.name)
                         },
                         onRemoveNoteClick = {
                             showDialog.value = true to it
