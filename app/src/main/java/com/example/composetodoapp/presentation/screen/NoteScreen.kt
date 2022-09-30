@@ -33,7 +33,8 @@ fun NoteScreen(
     onAddNote: (Note) -> Unit,
     onRemoveNote: (Note) -> Unit,
     onRemoveAll: () -> Unit,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    setCurrentNote: (Note) -> Unit
 ) {
     val title = remember {
         mutableStateOf("")
@@ -168,6 +169,7 @@ fun NoteScreen(
                     NoteRow(
                         note = note,
                         onNoteClicked = {
+                            setCurrentNote(it)
                             navController.navigate(route = NavigationType.DETAILSCREEN.name)
                         },
                         onRemoveNoteClick = {

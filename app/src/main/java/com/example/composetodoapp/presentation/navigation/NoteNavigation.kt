@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
     val navController = rememberNavController()
     val notes = viewModel.requestGetAllNoteList.collectAsState()
+    val note = viewModel.currentNote.collectAsState()
 
     return NavHost(navController = navController, startDestination = NavigationType.HOMESCREEN.name) {
         composable(NavigationType.HOMESCREEN.name) {
@@ -25,14 +26,15 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
                 onAddNote = viewModel::addNote,
                 onRemoveNote = viewModel::removeNote,
                 onRemoveAll = viewModel::removeAllNote,
-                coroutineScope = coroutineScope
+                coroutineScope = coroutineScope,
+                setCurrentNote = viewModel::setCurrentNote,
             )
         }
 
         composable(
             route = NavigationType.DETAILSCREEN.name,
         ) {
-            NoteDetailScreen(navController = navController)
+            NoteDetailScreen(navController = navController, note.value)
         }
     }
 }
