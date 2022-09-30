@@ -65,8 +65,7 @@ fun NoteScreen(
     }
 
     if (showAllRemoveDialog.value) {
-        CustomDialog(
-            value = stringResource(id = R.string.dialog_all_remove_title),
+        CustomDialog(value = stringResource(id = R.string.dialog_all_remove_title),
             setShowDialog = {
                 showAllRemoveDialog.value = it
             }) {
@@ -126,7 +125,10 @@ fun NoteScreen(
                 keyboardContainer = keyboardContainer
             )
 
-            NoteButton(text = "저장", enabled = title.value.isNotEmpty() && description.value.isNotEmpty()) {
+            CustomButton(
+                text = "저장",
+                enabled = title.value.isNotEmpty() && description.value.isNotEmpty()
+            ) {
                 if (title.value.isNotEmpty() && description.value.isNotEmpty()) {
                     onAddNote(Note(title = title.value, description = description.value))
                     coroutineScope.launch {
@@ -149,7 +151,10 @@ fun NoteScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = stringResource(id = R.string.note_cnt, notes.size), modifier = Modifier.padding(end = 10.dp))
+                Text(
+                    text = stringResource(id = R.string.note_cnt, notes.size),
+                    modifier = Modifier.padding(end = 10.dp)
+                )
                 DeleteView(text = "전체 삭제", enabled = notes.isNotEmpty()) {
                     showAllRemoveDialog.value = true
                 }
@@ -157,9 +162,15 @@ fun NoteScreen(
 
             LazyColumn {
                 items(notes) { note ->
-                    NoteRow(note = note, onNoteClicked = {
-                        showDialog.value = true to it
-                    })
+                    NoteRow(
+                        note = note,
+                        onNoteClicked = {
+                            // TODO: 상세화면으로 이동 -> BottomSheet 띄울 것
+                        },
+                        onRemoveNoteClick = {
+                            showDialog.value = true to it
+                        }
+                    )
                 }
             }
         }

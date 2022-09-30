@@ -48,7 +48,7 @@ fun NoteInputText(
 }
 
 @Composable
-fun NoteButton(
+fun CustomButton(
     modifier: Modifier = Modifier, text: String, enabled: Boolean = true, onClick: () -> Unit
 ) {
     OutlinedButton(
@@ -70,7 +70,6 @@ fun DeleteView(
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
-
         OutlinedButton(
             onClick = onClick,
             shape = RoundedCornerShape(
@@ -90,7 +89,10 @@ fun DeleteView(
 
 @Composable
 fun NoteRow(
-    modifier: Modifier = Modifier, note: Note, onNoteClicked: (Note) -> Unit
+    modifier: Modifier = Modifier,
+    note: Note,
+    onNoteClicked: (Note) -> Unit,
+    onRemoveNoteClick: (Note) -> Unit,
 ) {
     Surface(
         modifier
@@ -110,18 +112,25 @@ fun NoteRow(
         shape = RoundedCornerShape(topEnd = 33.dp, bottomStart = 33.dp, topStart = 5.dp, bottomEnd = 5.dp),
     ) {
         // clickable 뒤에 Padding 을 넣어야 Click 영역 커짐
-        Column(
+        Row(
             modifier
                 .clickable { onNoteClicked(note) }
                 .padding(horizontal = 14.dp, vertical = 6.dp),
-            horizontalAlignment = Alignment.Start
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = note.title, style = MaterialTheme.typography.subtitle2)
-            Text(text = note.description, style = MaterialTheme.typography.subtitle1)
-            Text(
-                text = timeFormatter().print(note.entryDate),
-                style = MaterialTheme.typography.caption
-            )
+            Column {
+                Text(text = note.title, style = MaterialTheme.typography.subtitle2)
+                Text(text = note.description, style = MaterialTheme.typography.subtitle1)
+                Text(
+                    text = timeFormatter().print(note.entryDate),
+                    style = MaterialTheme.typography.caption
+                )
+            }
+
+            CustomButton(text = "삭제", onClick = {
+                onRemoveNoteClick(note)
+            })
         }
     }
 }
