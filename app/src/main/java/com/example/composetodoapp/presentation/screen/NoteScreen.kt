@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.runtime.Composable
@@ -28,6 +25,8 @@ import com.example.composetodoapp.presentation.components.CustomDialog
 import com.example.composetodoapp.presentation.components.NoteButton
 import com.example.composetodoapp.presentation.components.NoteInputText
 import com.example.composetodoapp.presentation.components.NoteRow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @Composable
@@ -35,6 +34,7 @@ fun NoteScreen(
     notes: List<Note>,
     onAddNote: (Note) -> Unit,
     onRemoveNote: (Note) -> Unit,
+    coroutineScope: CoroutineScope
 ) {
     val title = remember {
         mutableStateOf("")
@@ -46,31 +46,37 @@ fun NoteScreen(
         mutableStateOf<Pair<Boolean, Note?>>(false to null)
     }
 
+    val scaffoldState = rememberScaffoldState()
+
     if (showDialog.value.first) {
         showDialog.value.second?.let { note ->
-            CustomDialog(
-                value = stringResource(id = R.string.dialog_title, note.title),
+            CustomDialog(value = stringResource(id = R.string.dialog_title, note.title),
                 setShowDialog = {
                     showDialog.value = it to null
                 },
                 onConfirmClick = {
                     onRemoveNote(note)
                     showDialog.value = false to null
-                }
-            )
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar("${note.title}를 삭제하였습니다.")
+                    }
+                })
         }
     }
 
     // 현재 소프트웨어 키보드를 제어할 수 있는 SoftwareKeyboardController 를 반환
     val keyboardContainer = LocalSoftwareKeyboardController.current
 
-    Column(modifier = Modifier.padding(6.dp)) {
-        TopAppBar(title = {
-            Text(text = stringResource(id = R.string.app_name))
-        }, actions = {
-            Icon(imageVector = Icons.Rounded.Notifications, contentDescription = "Icon")
-        }, backgroundColor = Color(0xFFDADFE3)
-        )
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(text = stringResource(id = R.string.app_name))
+            }, actions = {
+                Icon(imageVector = Icons.Rounded.Notifications, contentDescription = "Icon")
+            }, backgroundColor = Color(0xFFDADFE3)
+            )
+        }, scaffoldState = scaffoldState
+    ) {
 
         Column(
             modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
@@ -109,20 +115,23 @@ fun NoteScreen(
             NoteButton(text = "저장") {
                 if (title.value.isNotEmpty() && description.value.isNotEmpty()) {
                     onAddNote(Note(title = title.value, description = description.value))
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar("메모를 작성하였습니다.")
+                    }
                     title.value = ""
                     description.value = ""
                     keyboardContainer?.hide()
                 }
             }
-        }
 
-        // 구분선
-        Divider(modifier = Modifier.padding(10.dp))
-        LazyColumn {
-            items(notes) { note ->
-                NoteRow(note = note, onNoteClicked = {
-                    showDialog.value = true to it
-                })
+            // 구분선
+            Divider(modifier = Modifier.padding(10.dp))
+            LazyColumn {
+                items(notes) { note ->
+                    NoteRow(note = note, onNoteClicked = {
+                        showDialog.value = true to it
+                    })
+                }
             }
         }
     }
