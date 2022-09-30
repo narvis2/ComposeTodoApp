@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ComposeTodoApp</string>
+    <string name="dialog_title">%1$s를 삭제하시겠습니까?</string>
 </resources>

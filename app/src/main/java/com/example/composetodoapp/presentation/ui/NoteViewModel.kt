@@ -6,8 +6,8 @@ import com.example.composetodoapp.domain.model.Note
 import com.example.composetodoapp.domain.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,19 +20,9 @@ class NoteViewModel @Inject constructor(
     private val requestSaveNoteUseCase: RequestSaveNoteUseCase,
     private val requestUpdateNoteUseCase: RequestUpdateNoteUseCase
 ) : ViewModel() {
-    private val _noteList = MutableStateFlow<List<Note>>(emptyList())
-    val noteList = _noteList.asStateFlow()
 
-    init {
-        requestGetAllNoteList()
-    }
-
-    private fun requestGetAllNoteList() = viewModelScope.launch {
-        getAllNoteListUseCase().collect {
-            if (it.isEmpty()) return@collect
-            _noteList.value = it
-        }
-    }
+    val requestGetAllNoteList =
+        getAllNoteListUseCase().stateIn(initialValue = emptyList(), started = SharingStarted.WhileSubscribed(5000L), scope = viewModelScope)
 
     fun addNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         requestSaveNoteUseCase(note)
