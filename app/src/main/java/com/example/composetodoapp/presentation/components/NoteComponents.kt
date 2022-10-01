@@ -7,6 +7,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -17,6 +19,7 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.composetodoapp.R
 import com.example.composetodoapp.domain.model.Note
 import com.example.composetodoapp.presentation.utils.timeFormatter
@@ -132,5 +135,22 @@ fun NoteRow(
                 onRemoveNoteClick(note)
             })
         }
+    }
+}
+
+@Composable
+fun NoteAddButton(navController: NavController) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        ExtendedFloatingActionButton(
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .align(alignment = Alignment.BottomEnd),
+            backgroundColor = colorResource(id = R.color.orange),
+            onClick = {
+
+            },
+            text = { Text(text = "Add") },
+            icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "Add") },
+        )
     }
 }

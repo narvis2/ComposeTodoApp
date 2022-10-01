@@ -56,7 +56,12 @@ fun NoteScreen(
                 Icon(imageVector = Icons.Rounded.Notifications, contentDescription = "Icon")
             }, backgroundColor = Color(0xFFDADFE3)
             )
-        }, scaffoldState = scaffoldState
+        },
+        scaffoldState = scaffoldState,
+        floatingActionButton = {
+            NoteAddButton(navController = navController)
+        },
+        floatingActionButtonPosition = FabPosition.End,
     ) {
 
         Column(
