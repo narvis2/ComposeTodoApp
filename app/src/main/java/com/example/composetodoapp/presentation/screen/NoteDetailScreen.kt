@@ -6,6 +6,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -33,6 +35,14 @@ fun NoteDetailScreen(
         val title = data.title
         val description = data.description
         val insertDate = timeFormatter("YY-MM-dd HH:mm").print(data.entryDate)
+
+        val modifyTitle = remember {
+            mutableStateOf(title)
+        }
+        val modifyDescription = remember {
+            mutableStateOf(description)
+        }
+
         Scaffold(topBar = {
             TopAppBar(backgroundColor = Color.White, title = {
                 Text(
@@ -61,10 +71,15 @@ fun NoteDetailScreen(
             })
         }) {
             NoteDetailContentView(
-                title = title,
-                description = description,
-                insertDate = insertDate
-            )
+                title = modifyTitle.value,
+                description = modifyDescription.value,
+                insertDate = insertDate,
+                onChangeTitle = {
+                    modifyTitle.value = it
+                }
+            ) {
+                modifyDescription.value = it
+            }
         }
     }
 }
