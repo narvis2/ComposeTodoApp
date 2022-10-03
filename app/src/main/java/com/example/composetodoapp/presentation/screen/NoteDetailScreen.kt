@@ -8,8 +8,10 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +24,7 @@ import com.example.composetodoapp.presentation.components.NoteDetailContentView
 import com.example.composetodoapp.presentation.navigation.NavigationType
 import com.example.composetodoapp.presentation.utils.timeFormatter
 
+@ExperimentalComposeUiApi
 @Composable
 fun NoteDetailScreen(
     navController: NavController,
@@ -32,6 +35,8 @@ fun NoteDetailScreen(
     setCurrentNote: (Note) -> Unit,
 ) {
     note?.let { data ->
+        val keyboardContainer = LocalSoftwareKeyboardController.current
+
         val title = data.title
         val description = data.description
         val insertDate = timeFormatter("YY-MM-dd HH:mm").print(data.entryDate)
@@ -76,9 +81,12 @@ fun NoteDetailScreen(
                 insertDate = insertDate,
                 onChangeTitle = {
                     modifyTitle.value = it
+                },
+                onChangeDescription = {
+                    modifyDescription.value = it
                 }
             ) {
-                modifyDescription.value = it
+                keyboardContainer?.hide()
             }
         }
     }

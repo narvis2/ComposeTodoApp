@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -30,7 +31,8 @@ fun NoteDetailContentView(
     description: String,
     insertDate: String,
     onChangeTitle: (String) -> Unit,
-    onChangeDescription: (String) -> Unit
+    onChangeDescription: (String) -> Unit,
+    onTitleSubmit: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -49,8 +51,8 @@ fun NoteDetailContentView(
                 )
                 .fillMaxWidth(),
         ) {
-            EditTitleInput(title = title) {
-                onChangeTitle(it)
+            EditTitleInput(title = title, onModifyText = onChangeTitle) {
+                onTitleSubmit()
             }
         }
 
@@ -103,11 +105,15 @@ fun NoteDetailContentView(
                     style = TextStyle(Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp),
                     modifier = modifier.padding(start = 10.dp, bottom = 5.dp)
                 )
+
                 Divider(color = colorResource(id = R.color.orange))
-                Text(
-                    text = description, style = TextStyle(
-                        Color.DarkGray, fontWeight = FontWeight.Medium, fontSize = 18.sp
-                    ), modifier = modifier.padding(10.dp, top = 10.dp)
+
+                EditDescriptionInput(
+                    description = description,
+                    onModifyText = onChangeDescription,
+                    onSubmitButton = {
+                        onTitleSubmit()
+                    }
                 )
             }
         }
@@ -115,45 +121,87 @@ fun NoteDetailContentView(
 }
 
 @Composable
-fun EditTitleInput(
-    modifier: Modifier = Modifier, title: String, onModifyText: (String) -> Unit
+fun EditDescriptionInput(
+    modifier: Modifier = Modifier,
+    description: String,
+    onModifyText: (String) -> Unit,
+    onSubmitButton: () -> Unit
 ) {
-    TextField(modifier = modifier
-        .fillMaxWidth()
-        .border(
-            BorderStroke(
-                width = 2.dp, color = colorResource(R.color.orange)
-            ), shape = RoundedCornerShape(10.dp)
-        ),
-        textStyle = TextStyle(
-            Color.Black,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        ),
-        singleLine = true,
+    TextField(
+        modifier = modifier.fillMaxWidth(),
+        value = description,
+        onValueChange = onModifyText,
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
         placeholder = {
-            Text(text = title)
+            Text(text = description)
         },
-        value = title,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        onValueChange = {
-            onModifyText(it)
-        },
+        textStyle = TextStyle(
+            Color.DarkGray,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Start
+        ),
+        keyboardActions = KeyboardActions(onDone = {
+            onSubmitButton()
+        })
+    )
+}
+
+@Composable
+fun EditTitleInput(
+    modifier: Modifier = Modifier,
+    title: String,
+    onModifyText: (String) -> Unit,
+    onSubmitButton: () -> Unit
+) {
+    TextField(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                BorderStroke(
+                    width = 2.dp, color = colorResource(R.color.orange)
+                ), shape = RoundedCornerShape(10.dp)
+            ),
+            textStyle = TextStyle(
+                Color.Black,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            ),
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            placeholder = {
+                Text(text = title)
+            },
+            value = title,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onValueChange = {
+                onModifyText(it)
+            },
+            keyboardActions = KeyboardActions(onDone = {
+                onSubmitButton()
+            }),
     )
 }
 
 @Preview
 @Composable
 fun NoteDetailContentViewPreview() {
-    NoteDetailContentView(title = "text",
+    NoteDetailContentView(
+        title = "text",
         description = "description",
         insertDate = "2022 09/30 17:53",
         onChangeTitle = {},
-        onChangeDescription = {})
+        onChangeDescription = {},
+        onTitleSubmit = {},
+    )
 }
