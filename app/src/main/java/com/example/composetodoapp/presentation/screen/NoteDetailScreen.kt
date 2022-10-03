@@ -29,10 +29,14 @@ import com.example.composetodoapp.presentation.utils.timeFormatter
 fun NoteDetailScreen(
     navController: NavController,
     note: Note?,
+    isTitleError: Boolean,
+    isDescriptionError: Boolean,
     setCustomDialogTitle: (Pair<String, Int?>) -> Unit,
     setCustomDialogConfirmText: (Int) -> Unit,
     setCustomDialogCancelText: (Int) -> Unit,
     setCurrentNote: (Note) -> Unit,
+    onSetTitleError: (Boolean) -> Unit,
+    onSetDescriptionError: (Boolean) -> Unit
 ) {
     note?.let { data ->
         val keyboardContainer = LocalSoftwareKeyboardController.current
@@ -79,12 +83,16 @@ fun NoteDetailScreen(
                 title = modifyTitle.value,
                 description = modifyDescription.value,
                 insertDate = insertDate,
+                titleError = isTitleError,
+                descriptionError = isDescriptionError,
                 onChangeTitle = {
+                    onSetTitleError(it.isEmpty())
                     modifyTitle.value = it
                 },
                 onChangeDescription = {
+                    onSetDescriptionError(it.isEmpty())
                     modifyDescription.value = it
-                }
+                },
             ) {
                 keyboardContainer?.hide()
             }

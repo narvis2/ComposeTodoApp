@@ -30,9 +30,11 @@ fun NoteDetailContentView(
     title: String,
     description: String,
     insertDate: String,
+    titleError: Boolean,
+    descriptionError: Boolean,
     onChangeTitle: (String) -> Unit,
     onChangeDescription: (String) -> Unit,
-    onTitleSubmit: () -> Unit
+    onTitleSubmit: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -41,6 +43,7 @@ fun NoteDetailContentView(
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Title
         Surface(
             modifier = modifier
                 .padding(top = 20.dp, bottom = 10.dp)
@@ -51,11 +54,12 @@ fun NoteDetailContentView(
                 )
                 .fillMaxWidth(),
         ) {
-            EditTitleInput(title = title, onModifyText = onChangeTitle) {
+            EditTitleInput(title = title, onModifyText = onChangeTitle, isError = titleError) {
                 onTitleSubmit()
             }
         }
 
+        // 작성, 수정 시간
         Row(
             modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -84,13 +88,17 @@ fun NoteDetailContentView(
             }
         }
 
+        // Description
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 20.dp, bottom = 40.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .border(
-                    BorderStroke(2.dp, colorResource(id = R.color.orange)),
+                    BorderStroke(
+                        2.dp,
+                        colorResource(id = if (descriptionError) R.color.red else R.color.orange)
+                    ),
                     shape = RoundedCornerShape(10.dp)
                 )
                 .background(color = Color.White), contentAlignment = Alignment.TopStart
@@ -116,6 +124,34 @@ fun NoteDetailContentView(
                     }
                 )
             }
+        }
+
+        OutlinedButton(
+            onClick = {},
+            shape = RoundedCornerShape(15),
+            border = BorderStroke(
+                1.dp,
+                /**
+                 * TODO:: 조건문 변경 필요
+                 * 조건
+                 * 1. title, description 이 비어있지 않고,
+                 * 2. 기존의 title 과 바뀐 title 이 서로 달라야함
+                 * 3. 기존의 description 과 바뀐 description 이 서로 달라야함
+                 */
+                if (title.isNotEmpty() && description.isNotEmpty()) Color.Red else Color.Gray
+            ),
+            /**
+             * TODO:: 조건문 변경 필요
+             * 조건
+             * 1. title, description 이 비어있지 않고,
+             * 2. 기존의 title 과 바뀐 title 이 서로 달라야함
+             * 3. 기존의 description 과 바뀐 description 이 서로 달라야함
+             */
+            enabled = title.isNotEmpty() && description.isNotEmpty(),
+            modifier = modifier,
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+        ) {
+            Text(text = stringResource(id = R.string.str_save))
         }
     }
 }
@@ -156,6 +192,7 @@ fun EditDescriptionInput(
 fun EditTitleInput(
     modifier: Modifier = Modifier,
     title: String,
+    isError: Boolean,
     onModifyText: (String) -> Unit,
     onSubmitButton: () -> Unit
 ) {
@@ -164,7 +201,8 @@ fun EditTitleInput(
             .fillMaxWidth()
             .border(
                 BorderStroke(
-                    width = 2.dp, color = colorResource(R.color.orange)
+                    width = 2.dp,
+                    color = colorResource(if (!isError) R.color.orange else R.color.red)
                 ), shape = RoundedCornerShape(10.dp)
             ),
             textStyle = TextStyle(
@@ -203,5 +241,7 @@ fun NoteDetailContentViewPreview() {
         onChangeTitle = {},
         onChangeDescription = {},
         onTitleSubmit = {},
+        titleError = false,
+        descriptionError = false,
     )
 }

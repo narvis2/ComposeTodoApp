@@ -9,4 +9,5 @@
     <string name="delete_note">$1$s를 삭제 하였습니다.</string>
     <string name="str_cancel">취소</string>
     <string name="str_delete">삭제</string>
+    <string name="str_save">저장</string>
 </resources>
