@@ -41,6 +41,7 @@ fun NoteWriteContentView(
     isTitleEmpty: Boolean,
     isDescriptionEmpty: Boolean,
     attachBitmap: Bitmap?,
+    onRemoveAttachBitmap: () -> Unit,
     onResetDescription: () -> Unit,
     onChangeTitle: (String) -> Unit,
     onChangeDescription: (String) -> Unit,
@@ -78,7 +79,7 @@ fun NoteWriteContentView(
         attachBitmap?.let {
             BoxWithConstraints(modifier = Modifier.padding(top = 15.dp)) {
                 Image(bitmap = it.asImageBitmap(), contentDescription = "")
-                IconButton(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.TopEnd).padding(top = 40.dp)) {
+                IconButton(onClick = onRemoveAttachBitmap, modifier = Modifier.align(Alignment.TopEnd).padding(top = 40.dp)) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "")
                 }
             }

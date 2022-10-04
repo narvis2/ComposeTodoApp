@@ -8,7 +8,8 @@ fun Note.toNoteEntity(): NoteEntity = NoteEntity(
     title = this.title,
     description = this.description,
     entryDate = this.entryDate,
-    updateDate = this.updateDate
+    updateDate = this.updateDate,
+    originalImage = image
 )
 
 fun NoteEntity.toNote(): Note = Note(
@@ -16,7 +17,8 @@ fun NoteEntity.toNote(): Note = Note(
     title = this.title,
     description = this.description,
     entryDate = this.entryDate,
-    updateDate = this.updateDate
+    updateDate = this.updateDate,
+    image = this.originalImage
 )
 
 fun List<NoteEntity>.toNoteList(): List<Note> = map {
