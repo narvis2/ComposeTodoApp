@@ -73,7 +73,7 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
         composable(
             route = NavigationType.WRITE_SCREEN.name
         ) {
-            NoteWriteScreen(navController = navController)
+            NoteWriteScreen(navController = navController, onSaveNote = viewModel::addNote)
         }
 
         dialog(
