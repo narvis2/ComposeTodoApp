@@ -100,7 +100,7 @@ fun NoteDetailScreen(
                             setCustomDialogTitle(data.title to R.string.dialog_modify_title)
                             setCustomDialogConfirmText(R.string.str_modify)
                             setCustomDialogCancelText(R.string.str_cancel)
-                            navController.navigate(route = NavigationType.CUSTOMDIALOG.name)
+                            navController.navigate(route = NavigationType.CUSTOM_DIALOG.name)
                         }, enabled = isSaveEnable
                     ) {
                         Icon(
@@ -116,7 +116,7 @@ fun NoteDetailScreen(
                         setCustomDialogTitle(data.title to R.string.dialog_title)
                         setCustomDialogConfirmText(R.string.str_delete)
                         setCustomDialogCancelText(R.string.str_cancel)
-                        navController.navigate(route = NavigationType.CUSTOMDIALOG.name)
+                        navController.navigate(route = NavigationType.CUSTOM_DIALOG.name)
                     }) {
                         Icon(
                             imageVector = Icons.Default.Delete,

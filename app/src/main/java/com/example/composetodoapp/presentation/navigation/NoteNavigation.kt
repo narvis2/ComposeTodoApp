@@ -13,6 +13,7 @@ import com.example.composetodoapp.R
 import com.example.composetodoapp.presentation.components.CustomDialog
 import com.example.composetodoapp.presentation.screen.NoteDetailScreen
 import com.example.composetodoapp.presentation.screen.NoteScreen
+import com.example.composetodoapp.presentation.screen.NoteWriteScreen
 import com.example.composetodoapp.presentation.ui.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -37,8 +38,8 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
     val isDescriptionError = viewModel.detailDescriptionError.collectAsState()
     val isTitleError = viewModel.detailTitleError.collectAsState()
 
-    return NavHost(navController = navController, startDestination = NavigationType.HOMESCREEN.name) {
-        composable(NavigationType.HOMESCREEN.name) {
+    return NavHost(navController = navController, startDestination = NavigationType.HOME_SCREEN.name) {
+        composable(NavigationType.HOME_SCREEN.name) {
             NoteScreen(
                 navController = navController,
                 notes = notes.value,
@@ -53,7 +54,7 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
         }
 
         composable(
-            route = NavigationType.DETAILSCREEN.name,
+            route = NavigationType.DETAIL_SCREEN.name,
         ) {
             NoteDetailScreen(
                 navController = navController,
@@ -69,8 +70,14 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
             )
         }
 
+        composable(
+            route = NavigationType.WRITE_SCREEN.name
+        ) {
+            NoteWriteScreen(navController = navController)
+        }
+
         dialog(
-            route = NavigationType.CUSTOMDIALOG.name,
+            route = NavigationType.CUSTOM_DIALOG.name,
             dialogProperties = DialogProperties(
                 dismissOnBackPress = true,
                 dismissOnClickOutside = true,

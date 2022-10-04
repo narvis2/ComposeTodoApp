@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.composetodoapp.R
 import com.example.composetodoapp.domain.model.Note
+import com.example.composetodoapp.presentation.navigation.NavigationType
 import com.example.composetodoapp.presentation.utils.timeFormatter
 
 @ExperimentalComposeUiApi
@@ -147,7 +148,7 @@ fun NoteAddButton(navController: NavController) {
                 .align(alignment = Alignment.BottomEnd),
             backgroundColor = colorResource(id = R.color.orange),
             onClick = {
-
+                navController.navigate(route = NavigationType.WRITE_SCREEN.name)
             },
             text = { Text(text = "Add") },
             icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "Add") },

@@ -81,7 +81,7 @@ fun CustomDialog(
                              * navController.currentBackStackEntry?.destination?.route
                              * -> 현재 Navigation Route 이름 가져오기
                              */
-                            if (navController.currentBackStackEntry?.destination?.route == NavigationType.DETAILSCREEN.name) {
+                            if (navController.currentBackStackEntry?.destination?.route == NavigationType.DETAIL_SCREEN.name) {
                                 navController.popBackStack()
                             }
                             onConfirmClick()
