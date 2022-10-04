@@ -15,10 +15,6 @@ data class Note(
     val updateDate: DateTime? = null,
     val image: ByteArray? = null
 ): Parcelable {
-    fun toOriginalImageBitmap(): Bitmap? {
-        val originalImage = this.image ?: return null
-        return BitmapFactory.decodeByteArray(originalImage, 0, originalImage.size)
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
