@@ -38,7 +38,9 @@ fun NoteScreen(
                     Text(text = stringResource(id = R.string.app_name))
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO: 노트 찾기 페이지로 이동*/ }) {
+                    IconButton(
+                        onClick = { navController.navigate(route = NavigationType.SEARCH_SCREEN.name) }
+                    ) {
                         Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
                     }
                 },

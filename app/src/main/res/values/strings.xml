@@ -15,4 +15,5 @@
     <string name="note_write_description_helper">내용을 입력해 주세요.</string>
     <string name="note_write_title_helper">제목을 입력해 주세요.</string>
     <string name="note_write_description_length">%1$d/250</string>
+    <string name="note_search">노트 검색</string>
 </resources>

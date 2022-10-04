@@ -14,6 +14,7 @@ import com.example.composetodoapp.R
 import com.example.composetodoapp.presentation.components.CustomDialog
 import com.example.composetodoapp.presentation.screen.NoteDetailScreen
 import com.example.composetodoapp.presentation.screen.NoteScreen
+import com.example.composetodoapp.presentation.screen.NoteSearchScreen
 import com.example.composetodoapp.presentation.screen.NoteWriteScreen
 import com.example.composetodoapp.presentation.ui.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -76,6 +77,12 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
                 coroutineScope = coroutineScope,
                 onSaveNote = viewModel::addNote
             )
+        }
+
+        composable(
+            route = NavigationType.SEARCH_SCREEN.name
+        ) {
+            NoteSearchScreen(navController = navController)
         }
 
         dialog(

@@ -4,5 +4,6 @@ enum class NavigationType {
     HOME_SCREEN,
     DETAIL_SCREEN,
     CUSTOM_DIALOG,
-    WRITE_SCREEN
+    WRITE_SCREEN,
+    SEARCH_SCREEN
 }
