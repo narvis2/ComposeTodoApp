@@ -91,6 +91,12 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
                     }
 
                     viewModel.currentNote.value?.let {
+                        if (customDialogTitle.value.second == R.string.dialog_modify_title) {
+                            viewModel.updateNote(it)
+                            scaffoldState.snackbarHostState.showSnackbar("${it.title}를 수정하였습니다.")
+                            return@launch
+                        }
+
                         viewModel.removeNote(it)
                         scaffoldState.snackbarHostState.showSnackbar("${it.title}를 삭제하였습니다.")
                     }

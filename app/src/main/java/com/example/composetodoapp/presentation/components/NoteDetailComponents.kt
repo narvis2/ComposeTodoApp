@@ -30,6 +30,7 @@ fun NoteDetailContentView(
     title: String,
     description: String,
     insertDate: String,
+    updateDate: String,
     titleError: Boolean,
     descriptionError: Boolean,
     onChangeTitle: (String) -> Unit,
@@ -81,7 +82,7 @@ fun NoteDetailContentView(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.note_update_at, insertDate),
+                    text = stringResource(id = R.string.note_update_at, updateDate),
                     style = TextStyle(color = Color.Gray, fontSize = 14.sp),
                     modifier = modifier.padding(10.dp)
                 )
@@ -124,34 +125,6 @@ fun NoteDetailContentView(
                     }
                 )
             }
-        }
-
-        OutlinedButton(
-            onClick = {},
-            shape = RoundedCornerShape(15),
-            border = BorderStroke(
-                1.dp,
-                /**
-                 * TODO:: 조건문 변경 필요
-                 * 조건
-                 * 1. title, description 이 비어있지 않고,
-                 * 2. 기존의 title 과 바뀐 title 이 서로 달라야함
-                 * 3. 기존의 description 과 바뀐 description 이 서로 달라야함
-                 */
-                if (title.isNotEmpty() && description.isNotEmpty()) Color.Red else Color.Gray
-            ),
-            /**
-             * TODO:: 조건문 변경 필요
-             * 조건
-             * 1. title, description 이 비어있지 않고,
-             * 2. 기존의 title 과 바뀐 title 이 서로 달라야함
-             * 3. 기존의 description 과 바뀐 description 이 서로 달라야함
-             */
-            enabled = title.isNotEmpty() && description.isNotEmpty(),
-            modifier = modifier,
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
-        ) {
-            Text(text = stringResource(id = R.string.str_save))
         }
     }
 }
@@ -238,6 +211,7 @@ fun NoteDetailContentViewPreview() {
         title = "text",
         description = "description",
         insertDate = "2022 09/30 17:53",
+        updateDate = "2022 10/04 09:46",
         onChangeTitle = {},
         onChangeDescription = {},
         onTitleSubmit = {},
