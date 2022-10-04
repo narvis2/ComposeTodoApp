@@ -132,7 +132,7 @@ fun NoteScreen(
                     setCustomDialogTitle("" to R.string.dialog_all_remove_title)
                     setCustomDialogConfirmText(R.string.str_delete)
                     setCustomDialogCancelText(R.string.str_cancel)
-                    navController.navigate(route = NavigationType.CUSTOMDIALOG.name)
+                    navController.navigate(route = NavigationType.CUSTOM_DIALOG.name)
                 }
             }
 
@@ -142,14 +142,14 @@ fun NoteScreen(
                         note = note,
                         onNoteClicked = {
                             setCurrentNote(it)
-                            navController.navigate(route = NavigationType.DETAILSCREEN.name)
+                            navController.navigate(route = NavigationType.DETAIL_SCREEN.name)
                         },
                         onRemoveNoteClick = {
                             setCurrentNote(it)
                             setCustomDialogTitle(it.title to R.string.dialog_title)
                             setCustomDialogConfirmText(R.string.str_delete)
                             setCustomDialogCancelText(R.string.str_cancel)
-                            navController.navigate(route = NavigationType.CUSTOMDIALOG.name)
+                            navController.navigate(route = NavigationType.CUSTOM_DIALOG.name)
                         }
                     )
                 }

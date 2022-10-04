@@ -1,7 +1,8 @@
 package com.example.composetodoapp.presentation.navigation
 
 enum class NavigationType {
-    HOMESCREEN,
-    DETAILSCREEN,
-    CUSTOMDIALOG
+    HOME_SCREEN,
+    DETAIL_SCREEN,
+    CUSTOM_DIALOG,
+    WRITE_SCREEN
 }
