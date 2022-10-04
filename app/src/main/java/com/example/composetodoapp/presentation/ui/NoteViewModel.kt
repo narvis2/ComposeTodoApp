@@ -23,20 +23,6 @@ class NoteViewModel @Inject constructor(
     private val requestSaveNoteUseCase: RequestSaveNoteUseCase,
     private val requestUpdateNoteUseCase: RequestUpdateNoteUseCase
 ) : ViewModel() {
-    private val _detailTitleError = MutableStateFlow(false)
-    val detailTitleError = _detailTitleError.asStateFlow()
-
-    fun setDetailTitleError(isError: Boolean) {
-        _detailTitleError.value = isError
-    }
-
-    private val _detailDescriptionError = MutableStateFlow(false)
-    val detailDescriptionError = _detailDescriptionError.asStateFlow()
-
-    fun setDetailDescriptionError(isError: Boolean) {
-        _detailDescriptionError.value = isError
-    }
-
     private val _customDialogTitle = MutableStateFlow<Pair<String, Int?>>("" to null)
     val customDialogTitle = _customDialogTitle.asStateFlow()
 

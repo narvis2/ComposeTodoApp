@@ -158,7 +158,6 @@ fun NoteWriteScreen(
         )
     }) {
         NoteWriteContentView(
-            navController = navController,
             descriptionFocusRequester = descriptionFocusRequester,
             focusManager = focusManager,
             title = title.value,
