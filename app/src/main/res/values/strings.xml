@@ -13,4 +13,7 @@
     <string name="str_modify">수정</string>
     <string name="dialog_modify_title">%1$s를 \n 수정 하시겠습니까?</string>
     <string name="note_write">노트 작성</string>
+    <string name="note_write_description_helper">내용을 입력해 주세요.</string>
+    <string name="note_write_title_helper">제목을 입력해 주세요.</string>
+    <string name="note_write_description_length">%1$d/250</string>
 </resources>
