@@ -43,8 +43,6 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
             NoteScreen(
                 navController = navController,
                 notes = notes.value,
-                onAddNote = viewModel::addNote,
-                coroutineScope = coroutineScope,
                 setCurrentNote = viewModel::setCurrentNote,
                 scaffoldState = scaffoldState,
                 setCustomDialogCancelText = viewModel::setCustomDialogCancelText,
