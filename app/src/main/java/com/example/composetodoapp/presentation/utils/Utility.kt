@@ -2,6 +2,7 @@ package com.example.composetodoapp.presentation.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -42,4 +43,9 @@ fun Bitmap.toByteArray(): ByteArray{
     val outputStream = ByteArrayOutputStream()
     this.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
     return outputStream.toByteArray()
+}
+
+fun ByteArray.toImageBitmap(): Bitmap {
+    val originalImage = this
+    return BitmapFactory.decodeByteArray(originalImage, 0, originalImage.size)
 }
