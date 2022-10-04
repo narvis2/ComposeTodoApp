@@ -26,14 +26,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.composetodoapp.R
 import com.example.composetodoapp.presentation.utils.addFocusCleaner
 
 @Composable
 fun NoteWriteContentView(
     modifier: Modifier = Modifier,
-    navController: NavController,
     descriptionFocusRequester: FocusRequester,
     focusManager: FocusManager,
     title: String,
@@ -95,9 +93,7 @@ fun NoteWriteContentView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Default.Image, contentDescription = "이미지")
-                }
+                Icon(imageVector = Icons.Default.Image, contentDescription = "이미지")
                 Text(text = "이미지 첨부", textAlign = TextAlign.Center)
             }
 

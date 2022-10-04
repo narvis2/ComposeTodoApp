@@ -1,5 +1,6 @@
 package com.example.composetodoapp.presentation.navigation
 
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,8 +36,7 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
     val customDialogCancelText = viewModel.customDialogCancelText.collectAsState()
 
     // NoteDetails
-    val isDescriptionError = viewModel.detailDescriptionError.collectAsState()
-    val isTitleError = viewModel.detailTitleError.collectAsState()
+    val noteDetailScrollState = rememberScrollState()
 
     return NavHost(navController = navController, startDestination = NavigationType.HOME_SCREEN.name) {
         composable(NavigationType.HOME_SCREEN.name) {
@@ -57,14 +57,13 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
             NoteDetailScreen(
                 navController = navController,
                 note.value,
-                isTitleError = isTitleError.value,
-                isDescriptionError = isDescriptionError.value,
+                scrollState = noteDetailScrollState,
+                scaffoldState = scaffoldState,
+                coroutineScope = coroutineScope,
                 setCustomDialogCancelText = viewModel::setCustomDialogCancelText,
                 setCustomDialogConfirmText = viewModel::setCustomDialogConfirmText,
                 setCustomDialogTitle = viewModel::setCustomDialogTitle,
                 setCurrentNote = viewModel::setCurrentNote,
-                onSetDescriptionError = viewModel::setDetailDescriptionError,
-                onSetTitleError = viewModel::setDetailTitleError
             )
         }
 
