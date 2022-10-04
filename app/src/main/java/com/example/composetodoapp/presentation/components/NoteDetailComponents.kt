@@ -5,9 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +17,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,13 +30,21 @@ fun NoteDetailContentView(
     title: String,
     description: String,
     insertDate: String,
+    updateDate: String,
+    titleError: Boolean,
+    descriptionError: Boolean,
+    onChangeTitle: (String) -> Unit,
+    onChangeDescription: (String) -> Unit,
+    onTitleSubmit: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxHeight()
             .fillMaxWidth()
-            .padding(horizontal = 20.dp), horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Title
         Surface(
             modifier = modifier
                 .padding(top = 20.dp, bottom = 10.dp)
@@ -45,18 +54,13 @@ fun NoteDetailContentView(
                     )
                 )
                 .fillMaxWidth(),
-            color = Color.White,
-            border = BorderStroke(2.dp, colorResource(id = R.color.orange)),
-            shape = RoundedCornerShape(10.dp),
         ) {
-            Text(
-                modifier = modifier.padding(10.dp),
-                text = title,
-                style = TextStyle(Color.Black, fontSize = 24.sp, fontWeight = FontWeight.Bold),
-                textAlign = TextAlign.Center
-            )
+            EditTitleInput(title = title, onModifyText = onChangeTitle, isError = titleError) {
+                onTitleSubmit()
+            }
         }
 
+        // 작성, 수정 시간
         Row(
             modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -78,43 +82,126 @@ fun NoteDetailContentView(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.note_update_at, insertDate),
+                    text = stringResource(id = R.string.note_update_at, updateDate),
                     style = TextStyle(color = Color.Gray, fontSize = 14.sp),
                     modifier = modifier.padding(10.dp)
                 )
             }
         }
-        
+
+        // Description
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 20.dp, bottom = 40.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .border(
-                    BorderStroke(2.dp, colorResource(id = R.color.orange)),
+                    BorderStroke(
+                        2.dp,
+                        colorResource(id = if (descriptionError) R.color.red else R.color.orange)
+                    ),
                     shape = RoundedCornerShape(10.dp)
                 )
-                .background(color = Color.White)
-            ,
-            contentAlignment = Alignment.TopStart
+                .background(color = Color.White), contentAlignment = Alignment.TopStart
         ) {
-            Column(modifier = modifier
-                .fillMaxSize()
-                .padding(10.dp)) {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(10.dp)
+            ) {
                 Text(
                     text = "내용",
                     style = TextStyle(Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp),
                     modifier = modifier.padding(start = 10.dp, bottom = 5.dp)
                 )
+
                 Divider(color = colorResource(id = R.color.orange))
-                Text(
-                    text = description,
-                    style = TextStyle(Color.DarkGray, fontWeight = FontWeight.Medium, fontSize = 18.sp),
-                    modifier = modifier.padding(10.dp, top = 10.dp)
+
+                EditDescriptionInput(
+                    description = description,
+                    onModifyText = onChangeDescription,
+                    onSubmitButton = {
+                        onTitleSubmit()
+                    }
                 )
             }
         }
     }
+}
+
+@Composable
+fun EditDescriptionInput(
+    modifier: Modifier = Modifier,
+    description: String,
+    onModifyText: (String) -> Unit,
+    onSubmitButton: () -> Unit
+) {
+    TextField(
+        modifier = modifier.fillMaxWidth(),
+        value = description,
+        onValueChange = onModifyText,
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        placeholder = {
+            Text(text = description)
+        },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        textStyle = TextStyle(
+            Color.DarkGray,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Start
+        ),
+        keyboardActions = KeyboardActions(onDone = {
+            onSubmitButton()
+        })
+    )
+}
+
+@Composable
+fun EditTitleInput(
+    modifier: Modifier = Modifier,
+    title: String,
+    isError: Boolean,
+    onModifyText: (String) -> Unit,
+    onSubmitButton: () -> Unit
+) {
+    TextField(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                BorderStroke(
+                    width = 2.dp,
+                    color = colorResource(if (!isError) R.color.orange else R.color.red)
+                ), shape = RoundedCornerShape(10.dp)
+            ),
+            textStyle = TextStyle(
+                Color.Black,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            ),
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            placeholder = {
+                Text(text = title)
+            },
+            value = title,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onValueChange = {
+                onModifyText(it)
+            },
+            keyboardActions = KeyboardActions(onDone = {
+                onSubmitButton()
+            }),
+    )
 }
 
 @Preview
@@ -123,6 +210,12 @@ fun NoteDetailContentViewPreview() {
     NoteDetailContentView(
         title = "text",
         description = "description",
-        insertDate = "2022 09/30 17:53"
+        insertDate = "2022 09/30 17:53",
+        updateDate = "2022 10/04 09:46",
+        onChangeTitle = {},
+        onChangeDescription = {},
+        onTitleSubmit = {},
+        titleError = false,
+        descriptionError = false,
     )
 }

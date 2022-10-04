@@ -33,6 +33,10 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
     val customDialogConfirmText = viewModel.customDialogConfirmText.collectAsState()
     val customDialogCancelText = viewModel.customDialogCancelText.collectAsState()
 
+    // NoteDetails
+    val isDescriptionError = viewModel.detailDescriptionError.collectAsState()
+    val isTitleError = viewModel.detailTitleError.collectAsState()
+
     return NavHost(navController = navController, startDestination = NavigationType.HOMESCREEN.name) {
         composable(NavigationType.HOMESCREEN.name) {
             NoteScreen(
@@ -54,10 +58,14 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
             NoteDetailScreen(
                 navController = navController,
                 note.value,
+                isTitleError = isTitleError.value,
+                isDescriptionError = isDescriptionError.value,
                 setCustomDialogCancelText = viewModel::setCustomDialogCancelText,
                 setCustomDialogConfirmText = viewModel::setCustomDialogConfirmText,
                 setCustomDialogTitle = viewModel::setCustomDialogTitle,
                 setCurrentNote = viewModel::setCurrentNote,
+                onSetDescriptionError = viewModel::setDetailDescriptionError,
+                onSetTitleError = viewModel::setDetailTitleError
             )
         }
 
@@ -83,6 +91,12 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
                     }
 
                     viewModel.currentNote.value?.let {
+                        if (customDialogTitle.value.second == R.string.dialog_modify_title) {
+                            viewModel.updateNote(it)
+                            scaffoldState.snackbarHostState.showSnackbar("${it.title}를 수정하였습니다.")
+                            return@launch
+                        }
+
                         viewModel.removeNote(it)
                         scaffoldState.snackbarHostState.showSnackbar("${it.title}를 삭제하였습니다.")
                     }
