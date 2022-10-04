@@ -33,11 +33,16 @@ import com.example.composetodoapp.R
 import com.example.composetodoapp.domain.model.Note
 import com.example.composetodoapp.presentation.components.NoteWriteContentView
 import com.example.composetodoapp.presentation.utils.toBitMap
+import com.example.composetodoapp.presentation.utils.toByteArray
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.math.max
 
 @Composable
 fun NoteWriteScreen(
     navController: NavController,
+    scaffoldState: ScaffoldState,
+    coroutineScope: CoroutineScope,
     onSaveNote: (Note) -> Unit,
 ) {
     val context = LocalContext.current
@@ -87,10 +92,14 @@ fun NoteWriteScreen(
                             override fun onLoadCleared(placeholder: Drawable?) {}
                         })
                 } ?: run {
-                    // TODO: Toast
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar("이미지 가져오기에 실패하였습니다. 잠시 후 다시 시도해 주세요.")
+                    }
                 }
             } else if (result.resultCode != Activity.RESULT_CANCELED) {
-                // TODO: Toast
+                coroutineScope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar("알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.")
+                }
             }
         }
 
@@ -131,7 +140,8 @@ fun NoteWriteScreen(
                             Note(
                                 title = title.value,
                                 description = description.value,
-                                updateDate = null
+                                updateDate = null,
+                                image = attachBitmap.value?.toByteArray()
                             )
                         )
                         navController.popBackStack()
@@ -156,6 +166,9 @@ fun NoteWriteScreen(
             isTitleEmpty = isTitleEmpty,
             isDescriptionEmpty = isDescriptionEmpty,
             attachBitmap = attachBitmap.value,
+            onRemoveAttachBitmap = {
+                attachBitmap.value = null
+            },
             onResetDescription = {
                 description.value = ""
             },

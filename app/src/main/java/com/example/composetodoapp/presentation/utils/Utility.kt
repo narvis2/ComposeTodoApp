@@ -13,6 +13,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import java.io.ByteArrayOutputStream
 
 
 fun timeFormatter(
@@ -35,4 +36,10 @@ fun Uri.toBitMap(context: Context): Bitmap {
     } else {
         MediaStore.Images.Media.getBitmap(context.contentResolver, this)
     }
+}
+
+fun Bitmap.toByteArray(): ByteArray{
+    val outputStream = ByteArrayOutputStream()
+    this.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+    return outputStream.toByteArray()
 }
