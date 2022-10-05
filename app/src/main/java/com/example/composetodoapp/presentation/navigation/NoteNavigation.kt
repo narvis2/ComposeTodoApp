@@ -91,7 +91,11 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
                 searchValue = searchValue.value,
                 searchNoteList = searchNoteList.value,
                 setSearchValue = viewModel::setSearchValue,
-                onSearchNoteList = viewModel::requestGetSearchNoteList
+                onSearchNoteList = viewModel::requestGetSearchNoteList,
+                setCurrentNote = viewModel::setCurrentNote,
+                setCustomDialogTitle = viewModel::setCustomDialogTitle,
+                setCustomDialogConfirmText = viewModel::setCustomDialogConfirmText,
+                setCustomDialogCancelText = viewModel::setCustomDialogCancelText
             )
         }
 

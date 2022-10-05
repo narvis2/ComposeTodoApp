@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.composetodoapp.R
 import com.example.composetodoapp.domain.model.Note
+import com.example.composetodoapp.presentation.components.NoteRow
 import com.example.composetodoapp.presentation.components.NoteSearchBar
+import com.example.composetodoapp.presentation.navigation.NavigationType
 
 @Composable
 fun NoteSearchScreen(
@@ -27,6 +31,10 @@ fun NoteSearchScreen(
     searchNoteList: List<Note>,
     setSearchValue: (String) -> Unit,
     onSearchNoteList: (String) -> Unit,
+    setCurrentNote: (Note) -> Unit,
+    setCustomDialogTitle: (Pair<String, Int?>) -> Unit,
+    setCustomDialogConfirmText: (Int) -> Unit,
+    setCustomDialogCancelText: (Int) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -68,7 +76,24 @@ fun NoteSearchScreen(
                 color = colorResource(id = R.color.orange)
             )
 
-            // TODO: LazyColum 에 SearchNoteList 뿌리기
+            LazyColumn {
+                items(searchNoteList) { note ->
+                    NoteRow(
+                        note = note,
+                        onNoteClicked = {
+                            setCurrentNote(it)
+                            navController.navigate(route = NavigationType.DETAIL_SCREEN.name)
+                        },
+                        onRemoveNoteClick = {
+                            setCurrentNote(it)
+                            setCustomDialogTitle(it.title to R.string.dialog_title)
+                            setCustomDialogConfirmText(R.string.str_delete)
+                            setCustomDialogCancelText(R.string.str_cancel)
+                            navController.navigate(route = NavigationType.CUSTOM_DIALOG.name)
+                        }
+                    )
+                }
+            }
         }
     }
 }
