@@ -23,6 +23,13 @@ class NoteViewModel @Inject constructor(
     private val requestSaveNoteUseCase: RequestSaveNoteUseCase,
     private val requestUpdateNoteUseCase: RequestUpdateNoteUseCase
 ) : ViewModel() {
+    private val _searchValue = MutableStateFlow("")
+    val searchValue = _searchValue.asStateFlow()
+
+    fun setSearchValue(query: String) {
+        _searchValue.value = query
+    }
+
     private val _customDialogTitle = MutableStateFlow<Pair<String, Int?>>("" to null)
     val customDialogTitle = _customDialogTitle.asStateFlow()
 
