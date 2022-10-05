@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 interface LocalDataSource {
     fun getAllNotes(): Flow<List<NoteEntity>>
 
+    suspend fun getSearchNotes(searchQuery: String): List<NoteEntity>
+
     suspend fun getNoteById(id: String): NoteEntity
 
     suspend fun saveNote(noteEntity: NoteEntity)

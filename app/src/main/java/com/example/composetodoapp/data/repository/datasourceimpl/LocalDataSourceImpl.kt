@@ -14,6 +14,10 @@ class LocalDataSourceImpl @Inject constructor(
         return noteDao.getNotes()
     }
 
+    override suspend fun getSearchNotes(searchQuery: String): List<NoteEntity> {
+        return noteDao.getSearchNotes(searchQuery)
+    }
+
     override suspend fun getNoteById(id: String): NoteEntity {
         return noteDao.getNoteById(id)
     }
