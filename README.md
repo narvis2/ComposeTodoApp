@@ -13,10 +13,13 @@
 * Kotlin Coroutine
 * Flow
 * Jetpack Compose UI
+* Jetpack Compose Navigation
 * AAC ViewModel
 * LiveData
 * Glide
 * Dagger-Hilt
 * Room
 * Timber
+* Joda
+* Material Icons
 * Material Design
