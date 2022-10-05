@@ -76,7 +76,12 @@ fun NoteSearchScreen(
                 color = colorResource(id = R.color.orange)
             )
 
-            LazyColumn {
+            Text(
+                text = stringResource(id = R.string.note_cnt, searchNoteList.size),
+                modifier = Modifier.padding(start = 20.dp, bottom = 10.dp)
+            )
+
+            LazyColumn(modifier = Modifier.padding(horizontal = 5.dp)) {
                 items(searchNoteList) { note ->
                     NoteRow(
                         note = note,
