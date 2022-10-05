@@ -60,7 +60,7 @@ fun CustomDialog(
                         } else {
                             value
                         }, style = TextStyle(
-                            fontSize = 24.sp,
+                            fontSize = 20.sp,
                             fontFamily = FontFamily.Default,
                             fontWeight = FontWeight.Bold
                         )
