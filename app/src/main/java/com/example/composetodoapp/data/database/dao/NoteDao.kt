@@ -14,6 +14,9 @@ interface NoteDao {
     @Query("SELECT * FROM `note` ORDER BY `note_entry_date` DESC")
     fun getNotes(): Flow<List<NoteEntity>>
 
+    @Query("SELECT * FROM `note` WHERE `note_title` OR `note_description` LIKE :searchQuery ORDER BY `note_entry_date` DESC")
+    suspend fun getSearchNotes(searchQuery: String): List<NoteEntity>
+
     @Query("SELECT * FROM `note` WHERE `id`=:id")
     suspend fun getNoteById(id: String): NoteEntity
 

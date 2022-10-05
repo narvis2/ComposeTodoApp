@@ -19,6 +19,10 @@ class NoteRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO).distinctUntilChanged()
     }
 
+    override suspend fun getSearchNoteList(searchQuery: String): List<Note> {
+        return localDataSource.getSearchNotes(searchQuery).toNoteList()
+    }
+
     override suspend fun getNoteId(id: String): Note {
         return localDataSource.getNoteById(id).toNote()
     }

@@ -41,6 +41,7 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
 
     // NoteSearch
     val searchValue = viewModel.searchValue.collectAsState()
+    val searchNoteList = viewModel.searchNoteList.collectAsState()
 
     return NavHost(navController = navController, startDestination = NavigationType.HOME_SCREEN.name) {
         composable(NavigationType.HOME_SCREEN.name) {
@@ -88,7 +89,9 @@ fun NoteNavigation(viewModel: NoteViewModel, coroutineScope: CoroutineScope) {
             NoteSearchScreen(
                 navController = navController,
                 searchValue = searchValue.value,
-                setSearchValue = viewModel::setSearchValue
+                searchNoteList = searchNoteList.value,
+                setSearchValue = viewModel::setSearchValue,
+                onSearchNoteList = viewModel::requestGetSearchNoteList
             )
         }
 

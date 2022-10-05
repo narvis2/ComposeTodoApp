@@ -20,6 +20,12 @@ object UseCaseModule {
 
     @Provides
     @ViewModelScoped
+    fun provideGetSearchNoteListUseCase(
+        noteRepository: NoteRepository
+    ): GetSearchNoteListUseCase = GetSearchNoteListUseCase(noteRepository)
+
+    @Provides
+    @ViewModelScoped
     fun provideGetNoteIdUseCase(
         noteRepository: NoteRepository
     ): GetNoteIdUseCase = GetNoteIdUseCase(noteRepository)

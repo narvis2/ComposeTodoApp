@@ -7,16 +7,14 @@ import com.example.composetodoapp.domain.model.Note
 import com.example.composetodoapp.domain.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
     private val getAllNoteListUseCase: GetAllNoteListUseCase,
+    private val getSearchNoteListUseCase: GetSearchNoteListUseCase,
     private val getNoteIdUseCase: GetNoteIdUseCase,
     private val requestDeleteAllNoteListUseCase: RequestDeleteAllNoteListUseCase,
     private val requestDeleteNoteUseCase: RequestDeleteNoteUseCase,
@@ -58,8 +56,18 @@ class NoteViewModel @Inject constructor(
         _currentNote.value = note
     }
 
-    val requestGetAllNoteList =
-        getAllNoteListUseCase().stateIn(initialValue = emptyList(), started = SharingStarted.WhileSubscribed(5000L), scope = viewModelScope)
+    val requestGetAllNoteList = getAllNoteListUseCase().stateIn(
+        initialValue = emptyList(),
+        started = SharingStarted.WhileSubscribed(5000L),
+        scope = viewModelScope
+    )
+
+    private val _searchNoteList = MutableStateFlow<List<Note>>(emptyList())
+    val searchNoteList = _searchNoteList.asStateFlow()
+
+    fun requestGetSearchNoteList(searchQuery: String) = viewModelScope.launch(Dispatchers.IO) {
+        _searchNoteList.value = getSearchNoteListUseCase(searchQuery)
+    }
 
     fun addNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         requestSaveNoteUseCase(note)

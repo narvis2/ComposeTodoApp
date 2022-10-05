@@ -17,13 +17,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.composetodoapp.R
+import com.example.composetodoapp.domain.model.Note
 import com.example.composetodoapp.presentation.components.NoteSearchBar
 
 @Composable
 fun NoteSearchScreen(
     navController: NavController,
     searchValue: String,
-    setSearchValue: (String) -> Unit
+    searchNoteList: List<Note>,
+    setSearchValue: (String) -> Unit,
+    onSearchNoteList: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -47,11 +50,11 @@ fun NoteSearchScreen(
                     }
                 },
                 onSubmitButton = {
-                    // TODO: Room 에 검색
+                    onSearchNoteList(searchValue)
                     focusManager.clearFocus()
                 },
                 onSearchButtonClick = {
-                    // TODO: Room 에 검색
+                    onSearchNoteList(searchValue)
                     setSearchValue("")
                     focusManager.clearFocus()
                 },
@@ -59,9 +62,13 @@ fun NoteSearchScreen(
             )
 
             Divider(
-                modifier = Modifier.fillMaxWidth().padding(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
                 color = colorResource(id = R.color.orange)
             )
+
+            // TODO: LazyColum 에 SearchNoteList 뿌리기
         }
     }
 }
